@@ -10,6 +10,7 @@ Module for creating webbrowser based graphs using Plotly and Dash.
 __author__ = 'XA'
 __version__ = '1.8'
 
+import os
 import csv
 import time
 import random
@@ -24,9 +25,30 @@ from plotly.graph_objs import *
 
 import pandas as pd
 
+
+root_dir = os.getcwd()
+assets_dir = os.path.join(root_dir,'assets')
+
+
+def create_folder(folder_name):
+    # Function for creating folder in case the folder does not exists. If the
+    # folder is already present it'll skip this function and move on to the
+    # next line.
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
+
+
+create_folder(assets_dir)
+
 app = dash.Dash('XA Visualizer')
+# external_css = os.path.join(assets_dir, 'stylesheet.css')
+# app.css.append_css({"external_url": external_css})
+# external_js = os.path.join(assets_dir, 'plotly_ga.js')
+# app.scripts.append_script({'external_url': external_js})
+
 df = pd.read_csv('vm.csv')
 url = 'http://127.0.0.1:8050/'
+
 run_queue = df['r'].tolist()
 blocked_process = df['b'].tolist()
 swap_memory = df['swpd'].tolist()
@@ -139,7 +161,14 @@ def update_graph(data_names):
 
     return graphs
 
+external_css = ["https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"]
+for css in external_css:
+    app.css.append_css({"external_url": css})
 
+external_js = ['https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js']
+for js in external_css:
+    app.scripts.append_script({'external_url': js})
+    
 if __name__ == '__main__':
     webbrowser.open(url)
     app.run_server(debug=True)
