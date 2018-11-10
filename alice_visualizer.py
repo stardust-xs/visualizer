@@ -157,6 +157,13 @@ def update_graph(data_names):
 
     return graphs
 
+
+external_css = os.path.join(assets_dir, 'stylesheet.css')
+app.css.append_css({"external_url": external_css})
+
+external_js = os.path.join(assets_dir, 'plotly_ga.js')
+app.scripts.append_script({'external_url': external_js})
+
 if __name__ == '__main__':
     webbrowser.open(url)
     app.run_server(debug=True)
