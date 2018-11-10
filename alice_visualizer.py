@@ -27,8 +27,9 @@ import pandas as pd
 
 
 root_dir = os.getcwd()
-assets_dir = os.path.join(root_dir,'assets')
 
+print(root_dir)
+assets_dir = os.path.join(root_dir,'assets')
 
 def create_folder(folder_name):
     # Function for creating folder in case the folder does not exists. If the
@@ -40,15 +41,10 @@ def create_folder(folder_name):
 
 create_folder(assets_dir)
 
-app = dash.Dash('XA Visualizer')
-# external_css = os.path.join(assets_dir, 'stylesheet.css')
-# app.css.append_css({"external_url": external_css})
-# external_js = os.path.join(assets_dir, 'plotly_ga.js')
-# app.scripts.append_script({'external_url': external_js})
 
+app = dash.Dash('XA Visualizer')
 df = pd.read_csv('vm.csv')
 url = 'http://127.0.0.1:8050/'
-
 run_queue = df['r'].tolist()
 blocked_process = df['b'].tolist()
 swap_memory = df['swpd'].tolist()
@@ -161,14 +157,6 @@ def update_graph(data_names):
 
     return graphs
 
-external_css = ["https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"]
-for css in external_css:
-    app.css.append_css({"external_url": css})
-
-external_js = ['https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js']
-for js in external_css:
-    app.scripts.append_script({'external_url': js})
-    
 if __name__ == '__main__':
     webbrowser.open(url)
     app.run_server(debug=True)
